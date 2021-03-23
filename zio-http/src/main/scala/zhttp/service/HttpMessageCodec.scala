@@ -27,7 +27,7 @@ trait HttpMessageCodec {
   /**
    * Tries to decode netty request into ZIO Http Request
    */
-  def decodeJResponse(jRes: JFullHttpResponse): Either[Throwable, Response.HttpResponse] = Try {
+  def decodeJResponse(jRes: JFullHttpResponse): Either[Throwable, UHttpResponse] = Try {
     val status  = Status.fromJHttpResponseStatus(jRes.status())
     val headers = Header.parse(jRes.headers())
     val content = HttpContent.Complete(jRes.content().toString(HTTP_CHARSET))
@@ -36,9 +36,9 @@ trait HttpMessageCodec {
   }.toEither
 
   /**
-   * Encode the [[Response]] to [io.netty.handler.codec.http.FullHttpResponse]
+   * Encode the [[UResponse]] to [io.netty.handler.codec.http.FullHttpResponse]
    */
-  def encodeResponse(jVersion: JHttpVersion, res: Response.HttpResponse): JFullHttpResponse = {
+  def encodeResponse[R](jVersion: JHttpVersion, res: Response.HttpResponse[R]): JFullHttpResponse = {
     val jHttpHeaders   =
       res.headers.foldLeft[JHttpHeaders](new JDefaultHttpHeaders()) { (jh, hh) =>
         jh.set(hh.name, hh.value)
