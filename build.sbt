@@ -18,14 +18,15 @@ lazy val root = (project in file("."))
 ThisBuild / githubWorkflowPublishTargetBranches := List()
 //scala fix isn't available for scala 3 so ensure we only run the fmt check
 //using the latest scala 2.13
-ThisBuild / githubWorkflowBuildPreamble := WorkflowJob(
-  "fmtCheck",
-  "Format",
-  List(
-    WorkflowStep.Run(List(s"sbt ++${Scala213} fmtCheck"), name = Some("Check formatting"))
-  ),
-  scalas = List(Scala213)
-).steps
+ThisBuild / githubWorkflowBuildPreamble :=
+  WorkflowJob(
+    "fmtCheck",
+    "Format",
+    List(
+      WorkflowStep.Run(List(s"sbt ++${Scala213} fmtCheck"), name = Some("Check formatting")),
+    ),
+    scalas = List(Scala213),
+  ).steps
 
 // Test Configuration
 ThisBuild / libraryDependencies ++=
@@ -73,9 +74,10 @@ lazy val zhttp = (project in file("./zio-http"))
     },
     libraryDependencies ++=
       Seq(
-        "dev.zio" %% "zio"         % zioVersion,
-        "dev.zio" %% "zio-streams" % zioVersion,
-        "io.netty" % "netty-all"   % "4.1.60.Final",
+        "dev.zio"                %% "zio"                     % zioVersion,
+        "dev.zio"                %% "zio-streams"             % zioVersion,
+        "io.netty"                % "netty-all"               % "4.1.60.Final",
+        "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2",
       ),
   )
 

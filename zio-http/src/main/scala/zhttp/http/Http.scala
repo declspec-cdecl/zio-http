@@ -2,8 +2,6 @@ package zhttp.http
 
 import zio.{CanFail, ZIO}
 
-import scala.annotation.unused
-
 /**
  * A functional domain to model Http apps using ZIO and that can work over any kind of request and response types.
  */
@@ -114,7 +112,7 @@ sealed trait Http[-R, +E, -A, +B] { self =>
    * Catches all the exceptions that the http app can fail with
    */
   def catchAll[R1 <: R, E1, A1 <: A, B1 >: B](f: E => Http[R1, E1, A1, B1])(implicit
-    @unused ev: CanFail[E],
+    ev: CanFail[E],
   ): Http[R1, E1, A1, B1] =
     self.foldM(f, Http.succeed)
 
